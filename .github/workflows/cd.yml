@@ -1,0 +1,20 @@
+name:deploy to ec2
+on:
+workflow_run:
+workflow:["Docker Image CI"]
+-type:completed All mapping items must start at the 
+
+jobs:
+deploys:
+runs-on:ubuntu-latest
+steps:
+name: deploy to ec2
+uses: appleboy/ssh-action@master
+with:
+host:${{secrets.Ec2HOST}}
+username:${{secrets.Ec2_USERNAME}}
+key:${{secrets.EC2_KEY}}
+script:
+docker pull ramram2/node-app:latest
+docker rm -f node-app || true
+docker run -d -p 4000:3000 --name node-app ramram27/node-app:latest
